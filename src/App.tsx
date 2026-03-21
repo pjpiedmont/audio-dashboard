@@ -3,7 +3,7 @@ import { SpectrumAnalyzer } from "./components/SpectrumAnalyzer";
 import { useAnalyserNode } from "./hooks/useAnalyserNode";
 
 function App() {
-	const { analyser, isRunning, startAnalyser, stopAnalyser } = useAnalyserNode();
+	const { analyser, isRunning, startAnalyser, stopAnalyser } = useAnalyserNode(4096);
 
 	return (
 		<div>
