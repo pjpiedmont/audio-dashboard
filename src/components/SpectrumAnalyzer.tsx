@@ -15,6 +15,10 @@ export function SpectrumAnalyzer({ analyser }: Props) {
 		const bufferLength = analyser.frequencyBinCount;
 		const dataArray = new Uint8Array(bufferLength);
 
+		const minHz = 20
+		const maxHz = analyser.context.sampleRate / 2
+		const hzPerBin = maxHz / analyser.frequencyBinCount
+
 		const draw = () => {
 			requestAnimationFrame(draw);
 			analyser.getByteFrequencyData(dataArray);
@@ -30,7 +34,9 @@ export function SpectrumAnalyzer({ analyser }: Props) {
 			canvasContext.beginPath();
 
 			const points = Array.from(dataArray).map((value, i) => {
-				const x = (i / bufferLength) * canvas.width;
+				const hz = i * hzPerBin
+
+				const x = (Math.log10(hz / minHz) / Math.log10(maxHz / minHz)) * canvas.width;
 				const y = canvas.height - (value / 256) * canvas.height;
 				return { x, y };
 			});
