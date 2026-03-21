@@ -1,3 +1,4 @@
+import { Oscilloscope } from "./components/Oscilloscope";
 import { SpectrumAnalyzer } from "./components/SpectrumAnalyzer";
 import { useAnalyserNode } from "./hooks/useAnalyserNode";
 
@@ -16,6 +17,7 @@ function App() {
 			{!analyser && <p>Analyser is not running.</p>}
 
 			{analyser && <SpectrumAnalyzer analyser={analyser} />}
+			{analyser && <Oscilloscope analyser={analyser} />}
 		</div>
 	)
 }
