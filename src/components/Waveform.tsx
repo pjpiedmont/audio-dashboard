@@ -19,7 +19,7 @@ export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
 		const canvasContext = canvas.getContext("2d", { willReadFrequently: true });
 
 		const sampleRate = analyser.context.sampleRate;
-		const windowDuration = 5; // seconds
+		const windowDuration = 10; // seconds
 		const pixelsPerSample = (canvas.width / (windowDuration * sampleRate));
 
 		let animationId: number;
@@ -29,36 +29,39 @@ export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
 
 			if (!canvasContext || !circularBuffer.current) return;
 
-			let numSamples: number;
+			let numNewSamples: number;
 
 			if (writeHead.current < readHead.current) {
-				numSamples = (writeHead.current + circularBuffer.current!.length) - readHead.current;
+				numNewSamples = (writeHead.current + circularBuffer.current!.length) - readHead.current;
 			} else {
-				numSamples = writeHead.current - readHead.current;
+				numNewSamples = writeHead.current - readHead.current;
 			}
 
-			if (numSamples === 0) return;
+			const wholePixelsToShift = Math.floor(numNewSamples * pixelsPerSample);
 
-			const pixelsToShift = numSamples * pixelsPerSample;
+			// Wait to draw until we have enough new samples to move at least 1 pixel
+			if (wholePixelsToShift < 1) return;
+
+			const samplesToDraw = Math.floor(wholePixelsToShift / pixelsPerSample);
 
 			const imageData = canvasContext.getImageData(
-				pixelsToShift, 0,
-				canvas.width - pixelsToShift, canvas.height
+				wholePixelsToShift, 0,
+				canvas.width - wholePixelsToShift, canvas.height
 			);
 			canvasContext.putImageData(imageData, 0, 0);
 
 			canvasContext.fillStyle = "rgb(0, 0, 0)";
 			canvasContext.fillRect(
-				canvas.width - pixelsToShift, 0,
-				pixelsToShift, canvas.height
+				canvas.width - wholePixelsToShift, 0,
+				wholePixelsToShift, canvas.height
 			);
 
 			canvasContext.lineWidth = 2;
 			canvasContext.strokeStyle = "rgb(255, 255, 255)";
 			canvasContext.beginPath();
 
-			for (let i = 0; i < numSamples; i++) {
-				const x = (canvas.width - pixelsToShift) + (i * pixelsPerSample);
+			for (let i = 0; i < samplesToDraw; i++) {
+				const x = (canvas.width - wholePixelsToShift) + (i * pixelsPerSample);
 				const sample = circularBuffer.current[readHead.current];
 				const y = (canvas.height / 2) - (sample * (canvas.height / 2));
 
