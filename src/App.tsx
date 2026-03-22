@@ -4,7 +4,14 @@ import { Waveform } from "./components/Waveform";
 import { useAnalyserNode } from "./hooks/useAnalyserNode";
 
 function App() {
-	const { analyser, isRunning, startAnalyser, stopAnalyser } = useAnalyserNode(4096);
+	const {
+		analyser,
+		isRunning,
+		startAnalyser,
+		stopAnalyser,
+		circularBuffer,
+		writeHead
+	} = useAnalyserNode(4096);
 
 	return (
 		<div>
@@ -19,7 +26,11 @@ function App() {
 
 			{analyser && <SpectrumAnalyzer analyser={analyser} />}
 			{analyser && <Oscilloscope analyser={analyser} />}
-			{analyser && <Waveform analyser={analyser} />}
+			{analyser && <Waveform
+				analyser={analyser}
+				circularBuffer={circularBuffer}
+				writeHead={writeHead}
+			/>}
 		</div>
 	)
 }

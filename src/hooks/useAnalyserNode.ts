@@ -1,24 +1,44 @@
 import { useState, useRef } from "react";
 
 export function useAnalyserNode(fftSize: number = 2048) {
-	const contextRef = useRef<AudioContext | null>(null);
 	const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 	const [isRunning, setIsRunning] = useState(false);
+	const contextRef = useRef<AudioContext | null>(null);
+	const circularBuffer = useRef<Float32Array | null>(null);
+	const writeHead = useRef(0);
 
 	const startAnalyser = async () => {
-		if (isRunning) return;
-
 		try {
 			const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 			const audioContext = new AudioContext();
-			const source = audioContext.createMediaStreamSource(stream);
-			const analyserNode = audioContext.createAnalyser();
 
+			const bufferSize = audioContext.sampleRate * 30; // 30 seconds buffer
+			circularBuffer.current = new Float32Array(bufferSize);
+
+			await audioContext.audioWorklet.addModule('/audio-processor.js');
+
+			const source = audioContext.createMediaStreamSource(stream);
+			const workletNode = new AudioWorkletNode(audioContext, 'audio-processor');
+			const analyserNode = audioContext.createAnalyser();
 			analyserNode.fftSize = fftSize;
+
+			source.connect(workletNode);
 			source.connect(analyserNode);
 
-			setAnalyser(analyserNode);
+			workletNode.port.onmessage = (e: MessageEvent<Float32Array>) => {
+				const samples = e.data;
+
+				samples.forEach(sample => {
+					if (circularBuffer.current) {
+						circularBuffer.current[writeHead.current] = sample;
+						writeHead.current++;
+						writeHead.current = writeHead.current % bufferSize;
+					}
+				});
+			};
+
 			contextRef.current = audioContext;
+			setAnalyser(analyserNode);
 			setIsRunning(true);
 		} catch (error) {
 			console.error("Error accessing microphone:", error);
@@ -33,9 +53,10 @@ export function useAnalyserNode(fftSize: number = 2048) {
 			contextRef.current = null;
 		}
 
+		writeHead.current = 0;
 		setAnalyser(null);
 		setIsRunning(false);
 	};
 
-	return { analyser, isRunning, startAnalyser, stopAnalyser };
+	return { analyser, isRunning, startAnalyser, stopAnalyser, circularBuffer, writeHead };
 }
