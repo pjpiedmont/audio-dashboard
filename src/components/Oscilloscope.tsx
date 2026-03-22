@@ -15,8 +15,10 @@ export function Oscilloscope({ analyser }: Props) {
 		const bufferLength = analyser.frequencyBinCount;
 		const dataArray = new Uint8Array(bufferLength);
 
+		let animationId: number;
+
 		const draw = () => {
-			requestAnimationFrame(draw);
+			animationId = requestAnimationFrame(draw);
 			analyser.getByteTimeDomainData(dataArray);
 
 			if (!canvasContext) return;
@@ -48,6 +50,12 @@ export function Oscilloscope({ analyser }: Props) {
 		};
 
 		draw();
+
+		return () => {
+			if (animationId) {
+				cancelAnimationFrame(animationId);
+			}
+		}
 	}, [analyser]);
 
 	return <canvas ref={canvasRef} width={1000} height={500} />;

@@ -15,13 +15,15 @@ export function SpectrumAnalyzer({ analyser }: Props) {
 		const bufferLength = analyser.frequencyBinCount;
 		const dataArray = new Uint8Array(bufferLength);
 
+		let animationId: number;
+
 		const minHz = 20
 		const maxHz = analyser.context.sampleRate / 2
 		const hzPerBin = maxHz / analyser.frequencyBinCount
 		const totalOctaves = Math.log2(maxHz / minHz)
 
 		const draw = () => {
-			requestAnimationFrame(draw);
+			animationId = requestAnimationFrame(draw);
 			analyser.getByteFrequencyData(dataArray);
 
 			if (!canvasContext) return;
@@ -55,6 +57,12 @@ export function SpectrumAnalyzer({ analyser }: Props) {
 		};
 
 		draw();
+
+		return () => {
+			if (animationId) {
+				cancelAnimationFrame(animationId);
+			}
+		}
 	}, [analyser]);
 
 	return <canvas ref={canvasRef} width={1000} height={500} />;
