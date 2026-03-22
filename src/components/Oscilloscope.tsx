@@ -43,7 +43,7 @@ export function Oscilloscope({ analyser }: Props) {
 				}
 			});
 
-			canvasContext.lineTo(canvas.width, canvas.height);
+			// canvasContext.lineTo(canvas.width, canvas.height);
 			canvasContext.stroke();
 		};
 

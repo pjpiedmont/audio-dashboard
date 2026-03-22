@@ -1,5 +1,6 @@
 import { Oscilloscope } from "./components/Oscilloscope";
 import { SpectrumAnalyzer } from "./components/SpectrumAnalyzer";
+import { Waveform } from "./components/Waveform";
 import { useAnalyserNode } from "./hooks/useAnalyserNode";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
 
 			{analyser && <SpectrumAnalyzer analyser={analyser} />}
 			{analyser && <Oscilloscope analyser={analyser} />}
+			{analyser && <Waveform analyser={analyser} />}
 		</div>
 	)
 }
