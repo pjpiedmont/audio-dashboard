@@ -58,15 +58,15 @@ I solved this by accumulating pixel offsets in the graphics task and waiting unt
 
 ## How to Run
 
-There are two options to run this project. You can either visit the [online version](url) or build and run the project on your own computer.
+There are two options to run this project. You can either visit the [online version](https://parkers-audio-dashboard.netlify.app/) or build and run the project on your own computer.
 
 ### Build and Run Locally
 
 1. Clone the repository to your computer.
 
 ```sh
-git clone <url>
-cd <dir>
+git clone https://github.com/pjpiedmont/audio-dashboard.git
+cd audio-dashboard
 ```
 
 2. Install dependencies and run the server.
