@@ -57,7 +57,7 @@ export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
 			);
 
 			canvasContext.lineWidth = 2;
-			canvasContext.strokeStyle = "rgb(255, 255, 255)";
+			canvasContext.strokeStyle = `hsl(${getComputedStyle(canvas).getPropertyValue('--color-waveform')})`;
 			canvasContext.beginPath();
 
 			for (let i = 0; i < samplesToDraw; i++) {

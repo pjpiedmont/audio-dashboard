@@ -27,7 +27,7 @@ export function Oscilloscope({ analyser }: Props) {
 			canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
 			canvasContext.lineWidth = 2;
-			canvasContext.strokeStyle = "rgb(255, 255, 255)";
+			canvasContext.strokeStyle = `hsl(${getComputedStyle(canvas).getPropertyValue('--color-oscilloscope')})`;
 
 			canvasContext.beginPath();
 

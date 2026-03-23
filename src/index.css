@@ -1,7 +1,36 @@
+:root {
+	--color-bg-primary: 0 0% 4%;
+	--color-bg-panel: 0 0% 50%;
+
+	--color-border: 0 0% 13%;
+
+	--color-text-primary: 0 0% 100%;
+	--color-text-muted: 0 0% 40%;
+
+	--color-oscilloscope: 152 100% 50%;
+	--color-waveform: 218 100% 63%;
+	--color-spectrum-low: 218 100% 63%;
+	--color-spectrum-high: 327 100% 63%;
+
+	--canvas-line-width: 2;
+}
+
 *,
 *::before,
 *::after {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+}
+
+body {
+	background-color: hsl(var(--color-bg-primary));
+	color: hsl(var(--color-text-primary));
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+canvas {
+	display: block;
+	background-color: hsl(var(--color-bg-panel));
+	border: 1px solid hsl(var(--color-border));
 }

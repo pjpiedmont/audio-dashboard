@@ -33,6 +33,7 @@ export function SpectrumAnalyzer({ analyser }: Props) {
 
 			canvasContext.lineWidth = 2;
 			canvasContext.strokeStyle = "rgb(255, 255, 255)";
+			canvasContext.strokeStyle = `hsl(${getComputedStyle(canvas).getPropertyValue('--color-spectrum-high')})`;
 
 			canvasContext.beginPath();
 
