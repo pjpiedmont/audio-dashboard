@@ -1,11 +1,28 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface Props {
 	analyser: AnalyserNode;
 }
 
 export function SpectrumAnalyzer({ analyser }: Props) {
+	const [canvasWidth, setCanvasWidth] = useState(1000);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+
+		if (!canvas) return;
+
+		const observer = new ResizeObserver(entries => {
+			const { width } = entries[0].contentRect;
+			canvas.width = width;
+			setCanvasWidth(width);
+			canvas.height = 500;
+		});
+
+		observer.observe(canvas.parentElement!);
+		return () => observer.disconnect();
+	}, []);
 
 	useEffect(() => {
 		if (!analyser || !canvasRef.current) return;
@@ -28,8 +45,7 @@ export function SpectrumAnalyzer({ analyser }: Props) {
 
 			if (!canvasContext) return;
 
-			canvasContext.fillStyle = "rgb(0, 0, 0)";
-			canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+			canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 
 			canvasContext.lineWidth = 2;
 			canvasContext.strokeStyle = "rgb(255, 255, 255)";
@@ -64,7 +80,7 @@ export function SpectrumAnalyzer({ analyser }: Props) {
 				cancelAnimationFrame(animationId);
 			}
 		}
-	}, [analyser]);
+	}, [analyser, canvasWidth]);
 
 	return <canvas ref={canvasRef} width={1000} height={500} />;
 }

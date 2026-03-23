@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface Props {
 	analyser: AnalyserNode;
@@ -7,8 +7,25 @@ interface Props {
 }
 
 export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
+	const [canvasWidth, setCanvasWidth] = useState(1000);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const readHead = useRef(0);
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+
+		if (!canvas) return;
+
+		const observer = new ResizeObserver(entries => {
+			const { width } = entries[0].contentRect;
+			canvas.width = width;
+			setCanvasWidth(width);
+			canvas.height = 500;
+		});
+
+		observer.observe(canvas.parentElement!);
+		return () => observer.disconnect();
+	}, []);
 
 	useEffect(() => {
 		if (!analyser || !canvasRef.current) return;
@@ -50,8 +67,7 @@ export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
 			);
 			canvasContext.putImageData(imageData, 0, 0);
 
-			canvasContext.fillStyle = "rgb(0, 0, 0)";
-			canvasContext.fillRect(
+			canvasContext.clearRect(
 				canvas.width - wholePixelsToShift, 0,
 				wholePixelsToShift, canvas.height
 			);
@@ -77,11 +93,6 @@ export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
 			canvasContext.stroke();
 		};
 
-		if (canvasContext) {
-			canvasContext.fillStyle = "rgb(0, 0, 0)";
-			canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-		}
-
 		draw();
 
 		return () => {
@@ -89,7 +100,7 @@ export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
 				cancelAnimationFrame(animationId);
 			}
 		}
-	}, [analyser]);
+	}, [analyser, canvasWidth]);
 
 	return <canvas ref={canvasRef} width={1000} height={500} />;
 }

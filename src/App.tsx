@@ -15,22 +15,34 @@ function App() {
 
 	return (
 		<div>
-			<h1>Audio Analyzer</h1>
+			<div className="container">
+				<h1>Audio Analyzer</h1>
 
-			<button onClick={isRunning ? stopAnalyser : startAnalyser}>
-				{isRunning ? "Stop Analyser" : "Start Analyser"}
-			</button>
+				<button onClick={isRunning ? stopAnalyser : startAnalyser}>
+					{isRunning ? "Stop Analyser" : "Start Analyser"}
+				</button>
 
-			{analyser && <p>Analyser is running with FFT size: {analyser.fftSize}</p>}
-			{!analyser && <p>Analyser is not running.</p>}
+				{analyser && <p>Analyser is running with FFT size: {analyser.fftSize}</p>}
+				{!analyser && <p>Analyser is not running.</p>}
 
-			{analyser && <SpectrumAnalyzer analyser={analyser} />}
-			{analyser && <Oscilloscope analyser={analyser} />}
-			{analyser && <Waveform
-				analyser={analyser}
-				circularBuffer={circularBuffer}
-				writeHead={writeHead}
-			/>}
+				{analyser && <div>
+					<div className="panel">
+						<SpectrumAnalyzer analyser={analyser} />
+					</div>
+
+					<div className="panel">
+						<Oscilloscope analyser={analyser} />
+					</div>
+
+					<div className="panel">
+						<Waveform
+							analyser={analyser}
+							circularBuffer={circularBuffer}
+							writeHead={writeHead}
+						/>
+					</div>
+				</div>}
+			</div>
 		</div>
 	)
 }
