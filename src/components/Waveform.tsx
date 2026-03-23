@@ -93,6 +93,7 @@ export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
 			canvasContext.stroke();
 		};
 
+		canvasContext?.clearRect(0, 0, canvas.width, canvas.height);
 		draw();
 
 		return () => {

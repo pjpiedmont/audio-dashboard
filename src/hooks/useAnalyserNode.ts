@@ -58,5 +58,10 @@ export function useAnalyserNode(fftSize: number = 2048) {
 		setIsRunning(false);
 	};
 
-	return { analyser, isRunning, startAnalyser, stopAnalyser, circularBuffer, writeHead };
+	const restartAnalyser = () => {
+		stopAnalyser();
+		startAnalyser();
+	};
+
+	return { analyser, isRunning, startAnalyser, stopAnalyser, restartAnalyser, circularBuffer, writeHead };
 }

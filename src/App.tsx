@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Oscilloscope } from "./components/Oscilloscope";
 import { Panel } from "./components/Panel";
 import { SpectrumAnalyzer } from "./components/SpectrumAnalyzer";
@@ -5,11 +6,13 @@ import { Waveform } from "./components/Waveform";
 import { useAnalyserNode } from "./hooks/useAnalyserNode";
 
 function App() {
+	const [windowDuration, setWindowDuration] = useState(10);
 	const {
 		analyser,
 		isRunning,
 		startAnalyser,
 		stopAnalyser,
+		restartAnalyser,
 		circularBuffer,
 		writeHead
 	} = useAnalyserNode(4096);
@@ -18,8 +21,14 @@ function App() {
 		<div className="container">
 			<h1>Audio Analyzer</h1>
 
-			<button onClick={isRunning ? stopAnalyser : startAnalyser}>
-				{isRunning ? "Stop Analyser" : "Start Analyser"}
+			<button onClick={startAnalyser} disabled={isRunning}>
+				Start Analyser
+			</button>
+			<button onClick={stopAnalyser} disabled={!isRunning}>
+				Stop Analyser
+			</button>
+			<button onClick={restartAnalyser} disabled={!isRunning}>
+				Restart Analyser
 			</button>
 
 			{analyser && <p>Analyser is running with FFT size: {analyser.fftSize}</p>}
