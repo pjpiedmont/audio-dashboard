@@ -1,9 +1,12 @@
 import { useState } from "react";
+
 import { Oscilloscope } from "./components/Oscilloscope";
 import { Panel } from "./components/Panel";
 import { SpectrumAnalyzer } from "./components/SpectrumAnalyzer";
 import { Waveform } from "./components/Waveform";
 import { useAnalyserNode } from "./hooks/useAnalyserNode";
+
+import { Play, Square } from 'lucide-react';
 
 function App() {
 	const [windowDuration, setWindowDuration] = useState(10);
@@ -14,7 +17,6 @@ function App() {
 		isRunning,
 		startAnalyser,
 		stopAnalyser,
-		restartAnalyser,
 		circularBuffer,
 		writeHead
 	} = useAnalyserNode();
@@ -22,7 +24,8 @@ function App() {
 	const handleFftChange = async (newSize: number) => {
 		setFftSize(newSize)
 		if (isRunning) {
-			await restartAnalyser(newSize)
+			await stopAnalyser()
+			await startAnalyser(newSize)
 		}
 	}
 
@@ -30,15 +33,16 @@ function App() {
 		<div className="container">
 			<h1>Audio Analyzer</h1>
 
-			<button onClick={() => startAnalyser(fftSize)} disabled={isRunning}>
-				Start Analyser
-			</button>
-			<button onClick={stopAnalyser} disabled={!isRunning}>
-				Stop Analyser
-			</button>
-			<button onClick={() => restartAnalyser(fftSize)} disabled={!isRunning}>
-				Restart Analyser
-			</button>
+			<div className="transport-controls">
+				<button
+					className={isRunning ? "transport-control running" : "transport-control"}
+					onClick={isRunning ? stopAnalyser : () => startAnalyser(fftSize)}
+					title={isRunning ? "Stop Audio Engine" : "Start Audio Engine"}
+					aria-label={isRunning ? "Stop Audio Engine" : "Start Audio Engine"}
+				>
+					{isRunning ? <Square size={20} /> : <Play size={20} />}
+				</button>
+			</div>
 
 			<div className="dashboard">
 				<div className="width-full">

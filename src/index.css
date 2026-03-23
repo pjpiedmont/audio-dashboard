@@ -74,7 +74,7 @@ h6 {
 }
 
 select,
-input[type="range"] {
+input[type="number"] {
 	accent-color: var(--color-spectrum-high);
 	background: var(--bg-primary);
 	border: 1px solid var(--border-color);
@@ -82,4 +82,42 @@ input[type="range"] {
 	border-radius: 4px;
 	padding: 2px 6px;
 	font-size: 11px;
+}
+
+.transport-controls {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.transport-control {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 14px;
+	border-radius: 4px;
+	border: 1px solid hsl(var(--color-text-primary));
+	background: transparent;
+	color: hsl(var(--color-text-primary));
+	cursor: pointer;
+	font-size: 11px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	transition: border-color 0.15s, color 0.15s;
+
+	&:hover {
+		border-color: hsl(var(--color-oscilloscope));
+		color: hsl(var(--color-oscilloscope));
+	}
+
+	&[disabled] {
+		border-color: hsl(var(--color-text-muted));
+		color: hsl(var(--color-text-muted));
+		cursor: not-allowed;
+	}
+
+	&.running:hover {
+		border-color: #ff4444;
+		color: #ff4444;
+	}
 }
