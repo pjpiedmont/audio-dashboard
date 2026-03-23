@@ -1,13 +1,13 @@
 import { useState, useRef } from "react";
 
-export function useAnalyserNode(fftSize: number = 2048) {
+export function useAnalyserNode() {
 	const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 	const [isRunning, setIsRunning] = useState(false);
 	const contextRef = useRef<AudioContext | null>(null);
 	const circularBuffer = useRef<Float32Array | null>(null);
 	const writeHead = useRef(0);
 
-	const startAnalyser = async () => {
+	const startAnalyser = async (fftSize: number) => {
 		try {
 			const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 			const audioContext = new AudioContext();
@@ -58,9 +58,9 @@ export function useAnalyserNode(fftSize: number = 2048) {
 		setIsRunning(false);
 	};
 
-	const restartAnalyser = () => {
+	const restartAnalyser = (fftSize: number) => {
 		stopAnalyser();
-		startAnalyser();
+		startAnalyser(fftSize);
 	};
 
 	return { analyser, isRunning, startAnalyser, stopAnalyser, restartAnalyser, circularBuffer, writeHead };
