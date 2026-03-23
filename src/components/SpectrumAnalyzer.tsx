@@ -52,6 +52,7 @@ export function SpectrumAnalyzer({ analyser }: Props) {
 			canvasContext.strokeStyle = `hsl(${getComputedStyle(canvas).getPropertyValue('--color-spectrum-high')})`;
 
 			canvasContext.beginPath();
+			canvasContext.moveTo(0, canvas.height);
 
 			const points = Array.from(dataArray).map((value, i) => {
 				const hz = i * hzPerBin
