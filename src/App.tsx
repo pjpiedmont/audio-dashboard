@@ -1,4 +1,5 @@
 import { Oscilloscope } from "./components/Oscilloscope";
+import { Panel } from "./components/Panel";
 import { SpectrumAnalyzer } from "./components/SpectrumAnalyzer";
 import { Waveform } from "./components/Waveform";
 import { useAnalyserNode } from "./hooks/useAnalyserNode";
@@ -26,21 +27,24 @@ function App() {
 				{!analyser && <p>Analyser is not running.</p>}
 
 				{analyser && <div>
-					<div className="panel">
+					<Panel
+						label="Spectrum Analyzer"
+						color="--color-spectrum-high"
+					>
 						<SpectrumAnalyzer analyser={analyser} />
-					</div>
+					</Panel>
 
-					<div className="panel">
+					<Panel label="Oscilloscope" color="--color-oscilloscope">
 						<Oscilloscope analyser={analyser} />
-					</div>
+					</Panel>
 
-					<div className="panel">
+					<Panel label="Waveform" color="--color-waveform">
 						<Waveform
 							analyser={analyser}
 							circularBuffer={circularBuffer}
 							writeHead={writeHead}
 						/>
-					</div>
+					</Panel>
 				</div>}
 			</div>
 		</div>

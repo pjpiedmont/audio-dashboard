@@ -2,7 +2,7 @@
 	--color-bg-primary: 0 0% 4%;
 	--color-bg-panel: 0 0% 7%;
 
-	--color-border: 0 0% 13%;
+	--color-border: 0 0% 20%;
 
 	--color-text-primary: 0 0% 100%;
 	--color-text-muted: 0 0% 40%;
@@ -15,6 +15,8 @@
 	--canvas-line-width: 2;
 	--border-width: 2px;
 	--border-radius: 8px;
+
+	--ff-mono: "SF Mono", SF Mono, Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
 
 *,
@@ -39,10 +41,4 @@ canvas {
 	max-width: 1200px;
 	margin: 0 auto;
 	padding: 20px;
-}
-
-.panel {
-	background-color: hsl(var(--color-bg-panel));
-	border: var(--border-width) solid hsl(var(--color-border));
-	border-radius: var(--border-radius);
 }
