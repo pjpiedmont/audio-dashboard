@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 interface Props {
-	analyser: AnalyserNode;
+	analyser: AnalyserNode | null;
 }
 
 export function SpectrumAnalyzer({ analyser }: Props) {

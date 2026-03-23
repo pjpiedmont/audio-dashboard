@@ -25,7 +25,7 @@ function App() {
 			{analyser && <p>Analyser is running with FFT size: {analyser.fftSize}</p>}
 			{!analyser && <p>Analyser is not running.</p>}
 
-			{analyser && <div className="dashboard">
+			<div className="dashboard">
 				<div className="width-full">
 					<Panel label="Waveform" color="--color-waveform">
 						<Waveform
@@ -47,7 +47,7 @@ function App() {
 						<SpectrumAnalyzer analyser={analyser} />
 					</Panel>
 				</div>
-			</div>}
+			</div>
 		</div>
 		// </div>
 	)
