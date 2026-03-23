@@ -6,7 +6,7 @@ import { SpectrumAnalyzer } from "./components/SpectrumAnalyzer";
 import { Waveform } from "./components/Waveform";
 import { useAnalyserNode } from "./hooks/useAnalyserNode";
 
-import { Play, Square } from 'lucide-react';
+import { Mic, MicOff } from 'lucide-react';
 
 function App() {
 	const [windowDuration, setWindowDuration] = useState(10);
@@ -40,7 +40,7 @@ function App() {
 					title={isRunning ? "Stop Audio Engine" : "Start Audio Engine"}
 					aria-label={isRunning ? "Stop Audio Engine" : "Start Audio Engine"}
 				>
-					{isRunning ? <Square size={20} /> : <Play size={20} />}
+					{isRunning ? <MicOff size={20} /> : <Mic size={20} />}
 				</button>
 			</div>
 
