@@ -64,3 +64,22 @@ h6 {
 .width-half {
 	grid-column: span 6;
 }
+
+.control {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 11px;
+	color: var(--text-muted);
+}
+
+select,
+input[type="range"] {
+	accent-color: var(--color-spectrum-high);
+	background: var(--bg-primary);
+	border: 1px solid var(--border-color);
+	color: var(--text-muted);
+	border-radius: 4px;
+	padding: 2px 6px;
+	font-size: 11px;
+}

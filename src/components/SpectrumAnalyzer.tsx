@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from "react";
 
 interface Props {
 	analyser: AnalyserNode | null;
+	xScale: 'linear' | 'decades' | 'octaves';
 }
 
-export function SpectrumAnalyzer({ analyser }: Props) {
+export function SpectrumAnalyzer({ analyser, xScale }: Props) {
 	const [canvasWidth, setCanvasWidth] = useState(1000);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -37,7 +38,18 @@ export function SpectrumAnalyzer({ analyser }: Props) {
 		const minHz = 20
 		const maxHz = analyser.context.sampleRate / 2
 		const hzPerBin = maxHz / analyser.frequencyBinCount
-		const totalOctaves = Math.log2(maxHz / minHz)
+		// const totalOctaves = Math.log2(maxHz / minHz)
+
+		const getX = (hz: number): number => {
+			switch (xScale) {
+				case 'decades':
+					return (Math.log10(hz / minHz) / Math.log10(maxHz / minHz)) * canvas.width
+				case 'octaves':
+					return (Math.log2(hz / minHz) / Math.log2(maxHz / minHz)) * canvas.width
+				default:
+					return (hz / maxHz) * canvas.width
+			}
+		}
 
 		const draw = () => {
 			animationId = requestAnimationFrame(draw);
@@ -57,7 +69,8 @@ export function SpectrumAnalyzer({ analyser }: Props) {
 			const points = Array.from(dataArray).map((value, i) => {
 				const hz = i * hzPerBin
 
-				const x = (Math.log2(hz / minHz) / totalOctaves) * canvas.width;
+				// const x = (Math.log2(hz / minHz) / totalOctaves) * canvas.width;
+				const x = getX(hz);
 				const y = canvas.height - (value / 255) * canvas.height;
 				return { x, y };
 			});
@@ -82,7 +95,7 @@ export function SpectrumAnalyzer({ analyser }: Props) {
 				cancelAnimationFrame(animationId);
 			}
 		}
-	}, [analyser, canvasWidth]);
+	}, [analyser, canvasWidth, xScale]);
 
 	return <canvas ref={canvasRef} width={1000} height={500} />;
 }

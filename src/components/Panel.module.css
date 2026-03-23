@@ -10,3 +10,16 @@
 	font-family: var(--ff-mono);
 	text-transform: uppercase;
 }
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+
+.controls {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}

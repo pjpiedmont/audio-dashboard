@@ -3,18 +3,22 @@ import styles from "./Panel.module.css"
 interface Props {
 	label: string
 	children: React.ReactNode,
-	color?: string
+	color?: string,
+	controls?: React.ReactNode
 }
 
-export function Panel({ label, children, color }: Props) {
+export function Panel({ label, children, color, controls }: Props) {
 	return (
 		<>
-			<span
-				className={styles.label}
-				style={{ color: `hsl(var(${color ?? '--color-text-primary'}))` }}
-			>
-				{label}
-			</span >
+			<div className={styles.header}>
+				<span
+					className={styles.label}
+					style={{ color: `hsl(var(${color ?? '--color-text-primary'}))` }}
+				>
+					{label}
+				</span >
+				{controls && <div className={styles.controls}>{controls}</div>}
+			</div>
 			<div className={styles.panel}>
 				{children}
 			</div>

@@ -4,9 +4,10 @@ interface Props {
 	analyser: AnalyserNode | null;
 	circularBuffer: React.RefObject<Float32Array | null>;
 	writeHead: React.RefObject<number>;
+	windowDuration?: number;
 }
 
-export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
+export function Waveform({ analyser, circularBuffer, writeHead, windowDuration }: Props) {
 	const [canvasWidth, setCanvasWidth] = useState(1000);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const readHead = useRef(0);
@@ -28,7 +29,7 @@ export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
 	}, []);
 
 	useEffect(() => {
-		if (!analyser || !canvasRef.current) return;
+		if (!analyser || !canvasRef.current || !windowDuration) return;
 
 		readHead.current = writeHead.current;
 
@@ -36,7 +37,6 @@ export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
 		const canvasContext = canvas.getContext("2d", { willReadFrequently: true });
 
 		const sampleRate = analyser.context.sampleRate;
-		const windowDuration = 10; // seconds
 		const pixelsPerSample = (canvas.width / (windowDuration * sampleRate));
 
 		let animationId: number;
@@ -101,7 +101,7 @@ export function Waveform({ analyser, circularBuffer, writeHead }: Props) {
 				cancelAnimationFrame(animationId);
 			}
 		}
-	}, [analyser, canvasWidth]);
+	}, [analyser, canvasWidth, windowDuration]);
 
 	return <canvas ref={canvasRef} width={1000} height={500} />;
 }
