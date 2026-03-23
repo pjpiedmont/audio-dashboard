@@ -37,8 +37,30 @@ canvas {
 	display: block;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--ff-mono);
+}
+
 .container {
-	max-width: 1200px;
 	margin: 0 auto;
 	padding: 20px;
+}
+
+.dashboard {
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	gap: 20px;
+}
+
+.width-full {
+	grid-column: span 12;
+}
+
+.width-half {
+	grid-column: span 6;
 }

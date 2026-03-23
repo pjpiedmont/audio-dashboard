@@ -1,5 +1,5 @@
 .panel {
-	margin-block: 1rem;
+	/* margin-block: 1rem; */
 	background-color: hsl(var(--color-bg-panel));
 	border: var(--border-width) solid hsl(var(--color-border));
 	border-radius: var(--border-radius);
