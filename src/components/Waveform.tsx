@@ -21,7 +21,7 @@ export function Waveform({ analyser, circularBuffer, writeHead, windowDuration }
 			const { width } = entries[0].contentRect;
 			canvas.width = width;
 			setCanvasWidth(width);
-			canvas.height = 500;
+			canvas.height = 400;
 		});
 
 		observer.observe(canvas.parentElement!);
@@ -103,5 +103,5 @@ export function Waveform({ analyser, circularBuffer, writeHead, windowDuration }
 		}
 	}, [analyser, canvasWidth, windowDuration]);
 
-	return <canvas ref={canvasRef} width={1000} height={500} />;
+	return <canvas ref={canvasRef} width={1000} height={400} />;
 }

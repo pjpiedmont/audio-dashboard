@@ -31,7 +31,7 @@ function App() {
 
 	return (
 		<div className="container">
-			<h1>Audio Analyzer</h1>
+			<h1>Audio Dashboard</h1>
 
 			<div className="transport-controls">
 				<button
