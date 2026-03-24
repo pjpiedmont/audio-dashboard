@@ -40,7 +40,6 @@ export function Oscilloscope({ analyser }: Props) {
 
 			if (!canvasContext) return;
 
-			// canvasContext.fillStyle = 'rgba(0, 0, 0, 0)';
 			canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 
 			canvasContext.lineWidth = 2;
@@ -62,7 +61,6 @@ export function Oscilloscope({ analyser }: Props) {
 				}
 			});
 
-			// canvasContext.lineTo(canvas.width, canvas.height);
 			canvasContext.stroke();
 		};
 

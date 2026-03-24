@@ -38,7 +38,6 @@ export function SpectrumAnalyzer({ analyser, xScale }: Props) {
 		const minHz = 20
 		const maxHz = analyser.context.sampleRate / 2
 		const hzPerBin = maxHz / analyser.frequencyBinCount
-		// const totalOctaves = Math.log2(maxHz / minHz)
 
 		const getX = (hz: number): number => {
 			switch (xScale) {
@@ -68,8 +67,6 @@ export function SpectrumAnalyzer({ analyser, xScale }: Props) {
 
 			const points = Array.from(dataArray).map((value, i) => {
 				const hz = i * hzPerBin
-
-				// const x = (Math.log2(hz / minHz) / totalOctaves) * canvas.width;
 				const x = getX(hz);
 				const y = canvas.height - (value / 255) * canvas.height;
 				return { x, y };
