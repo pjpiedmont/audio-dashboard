@@ -58,7 +58,7 @@ I solved this by accumulating pixel offsets in the graphics task and waiting unt
 
 ## How to Run
 
-There are two options to run this project. You can either visit the [online version](https://parkers-audio-dashboard.netlify.app/) or build and run the project on your own computer.
+There are two options to run this project. You can either visit the [online version](https://audio-dashboard.parkerpiedmont.dev/) or build and run the project on your own computer.
 
 ### Build and Run Locally
 
