@@ -53,11 +53,11 @@ describe("CircularBuffer", () => {
 	it("should stop reading when it hits the write head", () => {
 		const buf = new CircularBuffer(5);
 		buf.write(new Float32Array([1, 2, 3, 4]));
-		buf.read(2); // read 1 and 2
+		buf.read(2);
 
 		const readData = buf.read(5); // should only read two elements
 		expect(Array.from(readData)).toEqual([3, 4]);
-		expect(buf.readHead).toBe(3);
+		expect(buf.readHead).toBe(4);
 	});
 
 	it("should calculate correct number of new samples using getNumNewSamples", () => {

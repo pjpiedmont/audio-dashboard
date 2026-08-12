@@ -20,6 +20,12 @@ export class CircularBuffer {
 	}
 
 	public read(count: number): Float32Array {
+		const numNewSamples = this.getNumNewSamples();
+
+		if (count > numNewSamples) {
+			count = numNewSamples;
+		}
+
 		const output = new Float32Array(count);
 
 		for (let i = 0; i < count; i++) {
