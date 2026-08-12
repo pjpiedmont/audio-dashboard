@@ -40,6 +40,7 @@ export class CircularBuffer {
 	}
 
 	public clear(): void {
+		this.buffer.fill(0);
 		this.readHead = 0;
 		this.writeHead = 0;
 	}
