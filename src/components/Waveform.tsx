@@ -43,14 +43,7 @@ export function Waveform({ analyser, circularBuffer, windowDuration }: Props) {
 
 			if (!canvasContext || !circularBuffer.current) return;
 
-			let numNewSamples: number;
-
-			if (circularBuffer.current?.writeHead < circularBuffer.current?.readHead) {
-				numNewSamples = (circularBuffer.current?.writeHead + circularBuffer.current!.size) - circularBuffer.current?.readHead;
-			} else {
-				numNewSamples = circularBuffer.current?.writeHead - circularBuffer.current?.readHead;
-			}
-
+			const numNewSamples: number = circularBuffer.current.getNumNewSamples();
 			const wholePixelsToShift = Math.floor(numNewSamples * pixelsPerSample);
 
 			// Wait to draw until we have enough new samples to move at least 1 pixel

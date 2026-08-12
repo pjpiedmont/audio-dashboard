@@ -31,6 +31,14 @@ export class CircularBuffer {
 		return output;
 	}
 
+	public getNumNewSamples(): number {
+		if (this.writeHead < this.readHead) {
+			return (this.writeHead + this.size) - this.readHead;
+		} else {
+			return this.writeHead - this.readHead;
+		}
+	}
+
 	public clear(): void {
 		this.readHead = 0;
 		this.writeHead = 0;
