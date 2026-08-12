@@ -1,11 +1,11 @@
 import { useState, useRef } from "react";
+import { CircularBuffer } from "../utils/CircularBuffer";
 
 export function useAnalyserNode() {
 	const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 	const [isRunning, setIsRunning] = useState(false);
 	const contextRef = useRef<AudioContext | null>(null);
-	const circularBuffer = useRef<Float32Array | null>(null);
-	const writeHead = useRef(0);
+	const circularBuffer = useRef<CircularBuffer | null>(null);
 
 	const startAnalyser = async (fftSize: number) => {
 		try {
@@ -13,7 +13,7 @@ export function useAnalyserNode() {
 			const audioContext = new AudioContext();
 
 			const bufferSize = audioContext.sampleRate * 30; // 30 seconds buffer
-			circularBuffer.current = new Float32Array(bufferSize);
+			circularBuffer.current = new CircularBuffer(bufferSize);
 
 			await audioContext.audioWorklet.addModule('/audio-processor.js');
 
@@ -27,14 +27,7 @@ export function useAnalyserNode() {
 
 			workletNode.port.onmessage = (e: MessageEvent<Float32Array>) => {
 				const samples = e.data;
-
-				samples.forEach(sample => {
-					if (circularBuffer.current) {
-						circularBuffer.current[writeHead.current] = sample;
-						writeHead.current++;
-						writeHead.current = writeHead.current % bufferSize;
-					}
-				});
+				circularBuffer.current?.write(samples);
 			};
 
 			contextRef.current = audioContext;
@@ -53,10 +46,10 @@ export function useAnalyserNode() {
 			contextRef.current = null;
 		}
 
-		writeHead.current = 0;
+		circularBuffer.current?.clear();
 		setAnalyser(null);
 		setIsRunning(false);
 	};
 
-	return { analyser, isRunning, startAnalyser, stopAnalyser, circularBuffer, writeHead };
+	return { analyser, isRunning, startAnalyser, stopAnalyser, circularBuffer };
 }

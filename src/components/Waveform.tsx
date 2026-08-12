@@ -1,16 +1,15 @@
 import { useState, useEffect, useRef } from "react";
+import type { CircularBuffer } from "../utils/CircularBuffer";
 
 interface Props {
 	analyser: AnalyserNode | null;
-	circularBuffer: React.RefObject<Float32Array | null>;
-	writeHead: React.RefObject<number>;
+	circularBuffer: React.RefObject<CircularBuffer | null>;
 	windowDuration?: number;
 }
 
-export function Waveform({ analyser, circularBuffer, writeHead, windowDuration }: Props) {
+export function Waveform({ analyser, circularBuffer, windowDuration }: Props) {
 	const [canvasWidth, setCanvasWidth] = useState(1000);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
-	const readHead = useRef(0);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -31,8 +30,6 @@ export function Waveform({ analyser, circularBuffer, writeHead, windowDuration }
 	useEffect(() => {
 		if (!analyser || !canvasRef.current || !windowDuration) return;
 
-		readHead.current = writeHead.current;
-
 		const canvas = canvasRef.current;
 		const canvasContext = canvas.getContext("2d", { willReadFrequently: true });
 
@@ -48,10 +45,10 @@ export function Waveform({ analyser, circularBuffer, writeHead, windowDuration }
 
 			let numNewSamples: number;
 
-			if (writeHead.current < readHead.current) {
-				numNewSamples = (writeHead.current + circularBuffer.current!.length) - readHead.current;
+			if (circularBuffer.current?.writeHead < circularBuffer.current?.readHead) {
+				numNewSamples = (circularBuffer.current?.writeHead + circularBuffer.current!.size) - circularBuffer.current?.readHead;
 			} else {
-				numNewSamples = writeHead.current - readHead.current;
+				numNewSamples = circularBuffer.current?.writeHead - circularBuffer.current?.readHead;
 			}
 
 			const wholePixelsToShift = Math.floor(numNewSamples * pixelsPerSample);
@@ -78,7 +75,7 @@ export function Waveform({ analyser, circularBuffer, writeHead, windowDuration }
 
 			for (let i = 0; i < samplesToDraw; i++) {
 				const x = (canvas.width - wholePixelsToShift) + (i * pixelsPerSample);
-				const sample = circularBuffer.current[readHead.current];
+				const sample = circularBuffer.current?.read(1)[0] ?? 0;
 				const y = (canvas.height / 2) - (sample * (canvas.height / 2));
 
 				if (i === 0) {
@@ -86,8 +83,6 @@ export function Waveform({ analyser, circularBuffer, writeHead, windowDuration }
 				} else {
 					canvasContext.lineTo(x, y);
 				}
-
-				readHead.current = (readHead.current + 1) % circularBuffer.current.length;
 			}
 
 			canvasContext.stroke();

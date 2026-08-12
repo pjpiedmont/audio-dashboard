@@ -18,7 +18,6 @@ function App() {
 		startAnalyser,
 		stopAnalyser,
 		circularBuffer,
-		writeHead
 	} = useAnalyserNode();
 
 	const handleFftChange = async (newSize: number) => {
@@ -66,7 +65,6 @@ function App() {
 						<Waveform
 							analyser={analyser}
 							circularBuffer={circularBuffer}
-							writeHead={writeHead}
 							windowDuration={windowDuration}
 						/>
 					</Panel>
