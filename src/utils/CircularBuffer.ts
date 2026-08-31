@@ -3,12 +3,14 @@ export class CircularBuffer {
 	public readHead: number;
 	public writeHead: number;
 	public readonly size: number;
+	public numNewSamples: number;
 
 	constructor(size: number) {
 		this.size = size;
 		this.buffer = new Float32Array(size);
 		this.readHead = 0;
 		this.writeHead = 0;
+		this.numNewSamples = 0;
 	}
 
 	public write(samples: Float32Array): void {
@@ -16,6 +18,14 @@ export class CircularBuffer {
 			this.buffer[this.writeHead] = sample;
 			this.writeHead++;
 			this.writeHead = this.writeHead % this.size;
+
+			if (this.numNewSamples < this.size) {
+				this.numNewSamples++;
+			} else {
+				// advance read head if buffer is full
+				this.readHead++;
+				this.readHead = this.readHead % this.size;
+			}
 		});
 	}
 
@@ -32,22 +42,20 @@ export class CircularBuffer {
 			output[i] = this.buffer[this.readHead];
 			this.readHead++;
 			this.readHead = this.readHead % this.size;
+			this.numNewSamples--;
 		}
 
 		return output;
 	}
 
 	public getNumNewSamples(): number {
-		if (this.writeHead < this.readHead) {
-			return (this.writeHead + this.size) - this.readHead;
-		} else {
-			return this.writeHead - this.readHead;
-		}
+		return this.numNewSamples;
 	}
 
 	public clear(): void {
 		this.buffer.fill(0);
 		this.readHead = 0;
 		this.writeHead = 0;
+		this.numNewSamples = 0;
 	}
 }
